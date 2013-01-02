@@ -1,0 +1,9 @@
+source ~/.screenrc
+
+chdir ~/projects/mce/apei/firmwarekit/linuxfirmwarekit
+screen -t build 1
+stuff "exec swrap bash $SESSION_DIR/1""^M"
+stuff "clear""^M"
+
+screen -t emacs 0
+stuff "swrap emacs $SESSION_DIR/0 --no-window-system""^M"

@@ -1,0 +1,131 @@
+* Why we need this?
+
+Even when working on one project, usually multiple software are
+needed.  For example, in programming, emacs is used to edit source
+code, one bash is used for testing, another is used for compiling. It
+is tedious to startup them, open latest file, type latest command
+etc. screen and session management of the software can be used to
+facilitate this. Multiple software can be started by screen
+automatically if you specify them in ~/.screenrc, Latest opened files
+can be saved by emacs desktop mechanism, latest typed command can be
+remember by bash history.
+
+But it is common to work on multiple projects simultaneously. Even if
+you work on just one project, you may use your computer both for work
+and leisure. The configuration and saved state for different projects
+may conflict. For example, two project may use different coding style,
+so that different emacs configuration are needed. The bash history
+from one project may flush that from another project. swrap provides a
+way to manage mutiple configuration and saved state for each software
+using a simple directory based scheme. A group of software for one
+project can be managed with a directory hierarchy. While multiple
+projects are managed with multiple directory hierarchy.
+
+* Introduction
+
+swrap stands for Session WRAPper, it provides a directory based
+session management for some software. The session here incude
+configuration files, saved state files etc. All configuration files,
+saved state files and other related files for each session are put
+into one directory. So that you can have multiple configuration, saved
+state at the same time. For example, you can have multiple bash
+histories, one for each session. This way, if you work on multiple
+projects simultaneously, bash history uses in one project will not
+flush the bash history used in another project.
+
+* Usage
+
+swrap <command> <session directory> [<arg1> <arg2> ...]
+
+Where
+
+ - <command> is software that is wrapped.
+
+ - <session directory> is the directory to store session related file,
+   which can be an absolute, relative path name or a directory under
+   ~/sessions. The base name of the <session directory> will be used
+   as the session name at least for screen.
+
+ - <arg1> <arg2> ... are arguments for <command>.
+
+* Supported software
+
+** Bash
+
+*** Configuration
+
+ - .bashrc in session directory instead of the global one will be used
+   if provided.
+
+*** Saved state
+
+ - A dedicated .bash_history in session directory will be used instead
+   of the global one.
+
+** Emacs
+
+*** Configuration
+
+ - emacs_init.el in session directory will be used as initialization
+   file in addition to the default one.
+
+*** Saved state
+
+ - Emacs desktop is used to save state, and saved state
+   (.emacs.desktop) will be put into session directory instead of
+   emacs startup directory or home directory.
+
+** Screen
+
+*** Configuration
+
+ - screenrc in session directory will be used as initialization file
+   instead of default one, but the default one can be loaded in this
+   file if desired.
+
+ - screen is used to manage other software, so screen session can be
+   seen as a compound session, while software run inside screen can be
+   seen as sub-sesssion. So it is natural to make session directories
+   for software run inside screen the sub-directories of screen
+   session directory. These sub-directories can be specified as
+   session directories for software run in screen in screenrc.
+
+*** Saved state
+
+ - No saved state is supported
+
+* Example
+
+Directory "example" shows a project session directory hierarchy
+managed by swrap. There are 3 software in project: screen, emacs and
+bash. "example" is session directory for screen, "example/screenrc" is
+screen configuration file. "example/0" is session directory for emacs,
+which is in window 0 of screen. "example/1" is session directory for
+bash, which is in window 1 of screen. "example/screenrc" is as follow:
+
+------------------- screenrc ---------------------------------
+source ~/.screenrc
+
+chdir ~/projects/mce/apei/firmwarekit/linuxfirmwarekit
+screen -t build 1
+stuff "exec swrap bash $SESSION_DIR/1""^M"
+stuff "clear""^M"
+
+screen -t emacs 0
+stuff "swrap emacs $SESSION_DIR/0 --no-window-system""^M"
+------------------- screenrc ---------------------------------
+
+Where swrap is used to execute software in screen windows, and
+corresponding session directories are specified too.
+
+When you execute:
+
+  swrap screen <path to>/example
+
+or
+
+ cp -r <path to>/example ~/sessions
+ sscreen example
+
+You will return to your latest project state or a new project state
+will be created for you.

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+PREFIX=/usr
+CMD_DIR=$PREFIX/lib/swrap
+
+usage()
+{
+    echo "$(basename $0) <command> <session dir>"
+    exit -1
+}
+
+norm_path()
+{
+    (cd $1; pwd)
+}
+
+[ $# -ge 2 ] || usage
+
+CMD="$1"
+shift
+SESSION_DIR="$1"
+shift
+
+if ! [ -f "$CMD_DIR/$CMD" ]; then
+    usage
+fi
+
+HSESSION_DIR="$HOME/sessions/$SESSION_DIR"
+
+if [ -d "$SESSION_DIR" ]; then
+    true
+elif [ -d "$HSESSION_DIR" ]; then
+    SESSION_DIR="$HSESSION_DIR"
+else
+    usage
+fi
+
+export SESSION_DIR="$(norm_path $SESSION_DIR)"
+
+exec bash $CMD_DIR/$CMD "$@"
