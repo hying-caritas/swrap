@@ -1,0 +1,3 @@
+HIST_FILE="$SESSION_DIR/.sbclsh_history"
+
+exec rlwrap -H "$HIST_FILE" "$@"

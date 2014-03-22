@@ -4,7 +4,7 @@ bin_dir = ${prefix}/bin
 cmd_dir = ${prefix}/lib/swrap
 doc_dir = ${prefix}/share/doc/swrap
 
-cmds = bash emacs screen
+cmds = bash emacs screen rlwrap
 
 all:
 
