@@ -4,7 +4,7 @@ bin_dir = ${prefix}/bin
 cmd_dir = ${prefix}/lib/swrap
 doc_dir = ${prefix}/share/doc/swrap
 
-cmds = bash emacs screen rlwrap
+cmds = bash emacs screen rlwrap tmux
 
 all:
 
@@ -13,6 +13,7 @@ install:
 	install -m 0755 swrap ${bin_dir}
 	install -m 0755 sscreen ${bin_dir}
 	install -m 0755 semacs ${bin_dir}
+	install -m 0755 stmux ${bin_dir}
 	install -d ${cmd_dir}
 	for cmd in ${cmds}; do \
 		install -m 0644 $$cmd ${cmd_dir}; \
