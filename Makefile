@@ -14,6 +14,7 @@ install:
 	install -m 0755 sscreen ${bin_dir}
 	install -m 0755 semacs ${bin_dir}
 	install -m 0755 stmux ${bin_dir}
+	install -m 0755 sbash ${bin_dir}
 	install -d ${cmd_dir}
 	for cmd in ${cmds}; do \
 		install -m 0644 $$cmd ${cmd_dir}; \

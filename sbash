@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -d "$1" ]; then
+	SESSION_DIR=$1
+else
+	p=${PWD#$HOME}
+	p=${p##/}
+	p=${p//\//__}
+	[[ $p ]] || p=__
+	SESSION_DIR=$HOME/.sessions/bash/$p
+	mkdir -p $SESSION_DIR
+fi
+
+swrap bash $SESSION_DIR "$@"
