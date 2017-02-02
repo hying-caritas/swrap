@@ -1,0 +1,20 @@
+#!/bin/sh
+
+prefix=/usr/local
+
+for option; do
+	optarg=$(expr "X$option" : '[^=]*=\(.*\)')
+	case "$option" in
+		--prefix=*)
+			prefix=$optarg ;;
+	esac
+done
+
+targets='
+Makefile
+swrap
+'
+
+for file in $targets; do
+	sed "1,\$s#@PREFIX@#$prefix#g" < "$file.in" > "$file"
+done
