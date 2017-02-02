@@ -11,12 +11,12 @@ tmux_find_session()
 
 CONFIG_FILE="$SESSION_DIR/tmux.conf"
 
-SESSION_NAME="$(basename $SESSION_DIR)"
+SESSION_NAME="$(basename "$SESSION_DIR")"
 
 chtitle "tmux: $SESSION_NAME,$USER@$(hostname)"
 
-if tmux_find_session $SESSION_NAME; then
-	exec tmux attach -t $SESSION_NAME
+if tmux_find_session "$SESSION_NAME"; then
+	exec tmux attach -t "$SESSION_NAME"
 else
-	exec tmux new -s $SESSION_NAME \; source "$CONFIG_FILE"
+	exec tmux new -s "$SESSION_NAME" \; source "$CONFIG_FILE"
 fi

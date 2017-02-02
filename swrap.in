@@ -5,13 +5,14 @@ CMD_DIR=$PREFIX/lib/swrap
 
 usage()
 {
-    echo "$(basename $0) <command> <session dir>"
-    exit -1
+	prog=$(basename "$0")
+	echo "$prog <command> <session dir>"
+	exit 1
 }
 
 norm_path()
 {
-    (cd $1; pwd)
+	(cd "$1"; pwd)
 }
 
 [ $# -ge 2 ] || usage
@@ -22,19 +23,20 @@ SESSION_DIR="$1"
 shift
 
 if ! [ -f "$CMD_DIR/$CMD" ]; then
-    usage
+	usage
 fi
 
 HSESSION_DIR="$HOME/sessions/$SESSION_DIR"
 
 if [ -d "$SESSION_DIR" ]; then
-    true
+	true
 elif [ -d "$HSESSION_DIR" ]; then
-    SESSION_DIR="$HSESSION_DIR"
+	SESSION_DIR="$HSESSION_DIR"
 else
-    usage
+	usage
 fi
 
-export SESSION_DIR="$(norm_path $SESSION_DIR)"
+SESSION_DIR="$(norm_path "$SESSION_DIR")"
+export SESSION_DIR
 
-exec bash $CMD_DIR/$CMD "$@"
+exec bash "$CMD_DIR/$CMD" "$@"

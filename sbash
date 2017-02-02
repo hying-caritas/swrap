@@ -8,7 +8,7 @@ else
 	p=${p//\//__}
 	[[ $p ]] || p=__
 	SESSION_DIR=$HOME/.sessions/bash/$p
-	mkdir -p $SESSION_DIR
+	mkdir -p "$SESSION_DIR"
 fi
 
-swrap bash $SESSION_DIR "$@"
+swrap bash "$SESSION_DIR" "$@"

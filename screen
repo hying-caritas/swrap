@@ -6,20 +6,20 @@ chtitle()
 
 screen_find_session()
 {
-    NAME="$1"
-    screen -ls | grep 'tached)' | sed -e '1,$s/\s\+[0-9]\+\.\([a-zA-Z0-9_]\+\)\s\+.*/\1/' | grep -w "$NAME" > /dev/null
+	NAME="$1"
+	screen -ls | grep 'tached)' | sed -e '1,$s/\s\+[0-9]\+\.\([a-zA-Z0-9_]\+\)\s\+.*/\1/' | grep -w "$NAME" > /dev/null
 }
 
 RC_FILE="$SESSION_DIR/screenrc"
 
-SESSION_NAME="$(basename $SESSION_DIR)"
+SESSION_NAME="$(basename "$SESSION_DIR")"
 
 chtitle "screen: $SESSION_NAME,$USER@$(hostname)"
 
-if screen_find_session $SESSION_NAME; then
-    exec screen -dr $SESSION_NAME
+if screen_find_session "$SESSION_NAME"; then
+	exec screen -dr "$SESSION_NAME"
 elif [ -f "$RC_FILE" ]; then
-    exec screen -S $SESSION_NAME -c "$RC_FILE"
+	exec screen -S "$SESSION_NAME" -c "$RC_FILE"
 else
-    exec screen -S $SESSION_NAME
+	exec screen -S "$SESSION_NAME"
 fi
